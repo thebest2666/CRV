@@ -1,0 +1,340 @@
+{% load static %}
+<!-- УЛЬТРА-НАДЕЖНЫЙ СТИЛЬ: Управление текстовым крестиком в обход блокировок CSS кнопок -->
+<style>
+    /* Если в инпуте отображается плейсхолдер (поле пустое) — скрываем текстовый крестик */
+    #headerSearchInput:placeholder-shown ~ #clearSearchTextBtn {
+        display: none !important;
+    }
+
+    /* Как только закупщик вводит хотя бы один символ — CSS мгновенно выводит текстовый крестик */
+    #headerSearchInput:not(:placeholder-shown) ~ #clearSearchTextBtn {
+        display: inline-block !important;
+    }
+</style>
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профессиональное пищевое оборудование CRV Иркутск</title>
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+
+    <!-- ПОДКЛЮЧЕНИЕ ВНЕШНЕГО CSS-ФАЙЛА В СТИЛЕ DJANGO -->
+    <link rel="stylesheet" href="{% static 'css/headers.css' %}">
+</head>
+<body>
+<header class="main-header">
+    <div class="header-top">
+        <!-- Логотип с надписью филиала сверху -->
+        <div class="logo"
+             style="display: flex; flex-direction: column; align-items: center; text-align: center; flex-shrink: 0;">
+            <a href="{% url 'catalog:index' %}" class="b2b-rotating-logo"
+               style="text-decoration: none; display: flex; flex-direction: column; align-items: center; outline: none;">
+                <span style="color: #e60000; font-weight: bold; font-size: 14px; margin-bottom: 6px; font-family: sans-serif; letter-spacing: 0.5px; text-transform: uppercase;">
+                    Иркутский филиал
+                </span>
+                <img src="{% static '/img/image1.png' %}" alt="Логотип компании"
+                     style="max-height: 95px; width: auto; object-fit: contain; display: block;">
+            </a>
+        </div>
+
+        <!-- Контакты -->
+        <address class="contacts">
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                <span>Адрес: <span class="address-text">г. Иркутск, ул. Подаптечная, д. 2</span></span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                <span>Телефон: <a href="tel:+73952799272" class="contact-link">+7 (3952) 79-92-72</a></span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope" aria-hidden="true"></i>
+                <span>Email: <a href="mailto:info@crv-bakery.ru" class="contact-link">irkutsk1@crv-bakery.ru</a></span>
+            </div>
+        </address>
+
+        <!-- Режим работы -->
+        <div class="work-hours">
+            <div class="work-hours-title">Режим работы:</div>
+            <div>Пн-Пт: <span class="days">09:00 - 18:00</span></div>
+            <div>Сб-Вс: <span class="weekend">Выходной</span></div>
+        </div>
+    </div>
+    <!-- Нижная часть хедера (Навигация и Интерактивный поиск) -->
+    <div style="background-color: #2d3748; padding: 16px 40px; box-sizing: border-box; width: 100%;">
+        <!-- НАСТРОЕНО: Однострочный флекс-режим с увеличенными шрифтами -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 15px; width: 100%; box-sizing: border-box;">
+
+            <!-- Основное меню (НАСТРОЕНО: Размер шрифта увеличен до 16px) -->
+            <div style="display: flex; gap: 24px; align-items: center; flex-shrink: 0;">
+                <a href="/"
+                   style="color: #ffffff; text-decoration: none; font-weight: 700; font-size: 18px; transition: color 0.15s ease;"
+                   onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#ffffff'">Главная</a>
+
+                <a href="{% url 'catalog:catalog' %}"
+                   style="color: #ffffff; text-decoration: none; font-weight: 700; font-size: 18px; transition: color 0.15s ease;"
+                   onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#ffffff'">Каталог</a>
+
+                <a href="/info/"
+                   style="color: #ffffff; text-decoration: none; font-weight: 700; font-size: 18px; transition: color 0.15s ease;"
+                   onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#ffffff'">О нас</a>
+
+                <a href="/contacts/"
+                   style="color: #ffffff; text-decoration: none; font-weight: 700; font-size: 18px; transition: color 0.15s ease;"
+                   onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#ffffff'">Контакты</a>
+            </div>
+
+            <!-- Ультра-компактный блок поиска (НАСТРОЕНО: Текст увеличен до 15px) -->
+            <form action="{% url 'catalog:catalog' %}" method="GET"
+                  style="display: flex !important; align-items: center !important; width: 100% !important; max-width: 480px !important; margin: 0 30px !important; box-sizing: border-box !important;">
+
+                <!-- Относительный контейнер, фиксирующий положение элементов внутри инпута -->
+                <div style="position: relative !important; flex: 1 !important; display: flex !important; align-items: center !important; box-sizing: border-box !important; width: 100% !important;">
+
+                    <input type="text" id="headerSearchInput" name="search" value="{{ search_query|default:'' }}"
+                           placeholder="Поиск оборудования..."
+                           style="width: 100% !important; padding: 10px 40px 10px 16px !important; border: 1px solid #cbd5e1 !important; border-radius: 6px 0 0 6px !important; font-size: 14px !important; outline: none !important; box-sizing: border-box !important; height: 40px !important; transition: all 0.15s ease !important; color: #2d3748 !important; background-color: #ffffff !important;"
+                           onfocus="this.style.borderColor='#0070f3'; this.style.boxShadow='0 0 0 2px rgba(0,112,243,0.15)';"
+                           onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';">
+
+                    <!-- ТЕКСТОВЫЙ КРЕСТИК ОЧИСТКИ: Выводится как обычный текст в обход любых блокировок CSS кнопок -->
+                    <span id="clearSearchTextBtn" onclick="clearSearchField()"
+                          style="position: absolute !important; right: 14px !important; top: 50% !important; transform: translateY(-50%) !important; font-size: 26px !important; color: #94a3b8 !important; cursor: pointer !important; line-height: 1 !important; z-index: 100 !important; font-family: -apple-system, BlinkMacSystemFont, sans-serif !important; font-weight: bold !important; user-select: none !important;-webkit-user-select: none !important;"
+                          title="Очистить строку"
+                          onmouseover="this.style.color='#ef4444';"
+                          onmouseout="this.style.color='#94a3b8';">
+            &times;
+        </span>
+                </div>
+
+                <button type="submit"
+                        style="background-color: #0070f3 !important; color: #ffffff !important; border: none !important; padding: 0 24px !important; border-radius: 0 6px 6px 0 !important; font-size: 14px !important; font-weight: 700 !important; cursor: pointer !important; height: 40px !important; transition: all 0.15s ease !important; outline: none !important;"
+                        onmouseover="this.style.backgroundColor='#0051a8'; this.style.boxShadow='0 4px 12px rgba(0,112,243,0.2)';"
+                        onmouseout="this.style.backgroundColor='#0070f3'; this.style.boxShadow='none';">
+                    Найти
+                </button>
+            </form>
+
+
+            <!-- ========================================================================= -->
+<!-- БЛОК 3: ИСПРАВЛЕННАЯ ПАНЕЛЬ ЛИЧНОГО КАБИНЕТА И СКРИПТЫ ХЕДЕРА             -->
+<!-- ========================================================================= -->
+
+            <!-- Панель личного кабинета (НАСТРОЕНО: Шрифты кнопок увеличены до 15px) -->
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; white-space: nowrap; flex-shrink: 0; box-sizing: border-box;">
+                {% if request.user.is_authenticated %}
+                <span style="color: #ffffff; font-family: sans-serif; font-size: 16px; font-weight: 500; display: inline-block;">
+                    Вы вошли как: <strong style="color: #ff4d4d; font-weight: 700;">{% if request.user.first_name or request.user.last_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.email }}{% endif %}</strong>
+                </span>
+
+                <!-- КНОПКА 1: Список всех пользователей (Для суперадминистраторов) -->
+                {% if request.user.is_superuser %}
+                <a href="{% url 'users:user_list' %}"
+                   style="background-color: #4a5568; color: #ffffff; border: 1px solid #718096; padding: 8px 14px; border-radius: 5px; text-decoration: none; font-weight: 600; font-family: sans-serif; font-size: 15px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px;"
+                   onmouseover="this.style.backgroundColor='#2d3748';"
+                   onmouseout="this.style.backgroundColor='#4a5568';">
+                    👥 Пользователи
+                </a>
+                {% endif %} <!-- ИСПРАВЛЕНО: Теперь условие суперадмина закрывается вовремя и не блокирует обычных пользователей -->
+
+                <!-- КНОПКА 2: Редактировать профиль -->
+                <a href="{% url 'users:profile' %}"
+                   style="background-color: #ffffff; color: #2d3748; border: 1px solid #cbd5e0; padding: 8px 14px; border-radius: 5px; text-decoration: none; font-weight: 600; font-family: sans-serif; font-size: 15px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px;"
+                   onmouseover="this.style.backgroundColor='#edf2f7'; this.style.color='#000000';"
+                   onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#2d3748';">
+                    ✏️ Профиль
+                </a>
+
+                <!-- Кнопка Выйти -->
+                <a href="{% url 'users:logout' %}"
+                   style="background-color: #e60000; color: #ffffff; border: none; padding: 8px 16px; border-radius: 5px; text-decoration: none; font-weight: 600; font-family: sans-serif; font-size: 15px; transition: background-color 0.2s;"
+                   onmouseover="this.style.backgroundColor='#b30000';"
+                   onmouseout="this.style.backgroundColor='#e60000';">
+                    Выйти
+                </a>
+                {% else %}
+                <a href="{% url 'users:login' %}"
+                   style="color: white; text-decoration: none; font-size: 15px; font-weight: 600; margin-right: 12px;">Войти</a>
+                <a href="{% url 'users:register' %}"
+                   style="color: white; text-decoration: none; font-size: 15px; font-weight: 600; background-color: #e60000; padding: 8px 16px; border-radius: 5px;">Регистрация</a>
+                {% endif %}
+            </div> <!-- Закрытие панели личного кабинета -->
+        </div> <!-- Закрытие флекс-ряда элементов навигации -->
+    </div> <!-- Закрытие синего пояса навигации -->
+
+    <script type="text/javascript">
+        /* Функция очистки текстового инпута поиска */
+        function clearSearchField() {
+            const searchInput = document.getElementById('headerSearchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                // Генерируем событие input, чтобы CSS Блока 1 мгновенно понял, что поле очистилось, и скрыл крестик
+                searchInput.dispatchEvent(new Event('input'));
+                searchInput.focus(); // Автоматически возвращаем фокус курсора закупщику
+            }
+        }
+    </script>
+</header>
+
+<style>
+    .b2b-rotating-logo img {
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    .b2b-rotating-logo:hover img {
+        transform: rotate(360deg);
+    }
+</style>
+
+
+<main>
+    {% block content %}
+    {% if messages %}
+        <div id="django-messages-container" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; width: 100%; box-sizing: border-box;">
+            {% for message in messages %}
+            <div class="b2b-alert-item" style="padding: 14px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; line-height: 1.4; transition: opacity 0.5s ease, transform 0.5s ease; box-sizing: border-box; width: 100%;
+                {% if message.tags == 'success' %}
+                    background-color: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0;
+                {% elif message.tags == 'error' %}
+                    background-color: #fee2e2; color: #ef4444; border: 1px solid #fca5a5;
+                {% else %}
+                    background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;
+                {% endif %}">
+
+                {% if message.tags == 'success' %}✓ {% elif message.tags == 'error' %}❌ {% endif %}{{ message }}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Скрипт автоматического плавного скрытия b2b-плашек через 4 секунды -->
+        <script type="text/javascript">
+            setTimeout(function() {
+                const container = document.getElementById('django-messages-container');
+                if (container) {
+                    const alerts = container.getElementsByClassName('b2b-alert-item');
+                    for (let alert of alerts) {
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                    }
+                    // Полностью удаляем контейнер из верстки через 500мс после анимации, чтобы не занимал место
+                    setTimeout(() => { container.style.display = 'none'; }, 500);
+                }
+            }, 4000); // 4000 миллисекунд = 4 секунды отображения
+        </script>
+        {% endif %}
+    <!-- Сюда Django автоматически подставляет разметку страниц -->
+    {% endblock %}
+</main>
+<!-- ========================================================================= -->
+<!-- БЛОК 1: СЖАТЫЙ НАЧАЛЬНЫЙ КОНТЕЙНЕР И ОПИСАНИЕ ФИЛИАЛА                     -->
+<!-- ========================================================================= -->
+<!-- Внутренние отступы padding уменьшены в два раза для b2b-компактности -->
+<footer style="background-color: #1e293b; border-top: 4px solid #e60000; padding: 20px 20px 10px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box; width: 100%; color: #ffffff;">
+    <div style="max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 25px; justify-content: space-between; box-sizing: border-box;">
+
+        <!-- Колонка 1: Компактное описание представительства -->
+        <div style="flex: 1.2; min-width: 250px; box-sizing: border-box;">
+            <h4 style="margin: 0 0 10px 0; font-size: 18px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">
+                CRV | <span style="color: #e60000; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Иркутск</span>
+            </h4>
+            <p style="margin: 0; color: #cbd5e1; font-size: 12px; line-height: 1.5; font-weight: 400; max-width: 280px;">
+                Официальное представительство и склад промышленного оборудования CRV Bakery в Восточной Сибири. Комплексное оснащение пищевых производств.
+            </p>
+        </div>
+        <!-- ========================================================================= -->
+        <!-- БЛОК 2: УПЛОТНЕННАЯ КОЛОНКА КАТЕГОРИЙ ОБОРУДОВАНИЯ                         -->
+        <!-- ========================================================================= -->
+        <div style="flex: 1; min-width: 180px; box-sizing: border-box;">
+            <!-- Отступ снизу уменьшен до 8px -->
+            <h5 style="margin: 0 0 8px 0; color: #ffffff; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
+                Оборудование
+            </h5>
+            <!-- Gap ужат до 4px для максимальной компактности -->
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box;">
+                <li style="margin-bottom: 2px;">
+                    <a href="{% url 'catalog:catalog' %}"
+                       style="color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 700; transition: color 0.15s;"
+                       onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#ffffff'">
+                        📁 Весь каталог техники
+                    </a>
+                </li>
+
+                {% for cat in global_b2b_categories %}
+                <li>
+                    <a href="{% url 'catalog:catalog' %}?category={{ cat.id }}"
+                       style="color: #cbd5e1; text-decoration: none; font-size: 12px; font-weight: 500; transition: color 0.15s; display: inline-block; line-height: 1.1;"
+                       onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#cbd5e1'">
+                        └ {{ cat.title }}
+                    </a>
+                </li>
+                {% empty %}
+                <li style="color: #94a3b8; font-size: 11px; font-style: italic;">Разделы не добавлены</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- ========================================================================= -->
+        <!-- БЛОК 3: ИНФОРМАЦИЯ И КОНТАКТЫ ФИЛИАЛА С МИНИМАЛЬНЫМ РАЗНОСОМ СТРОК         -->
+        <!-- ========================================================================= -->
+        <!-- Колонка 3: Сервис и Инфо -->
+        <div style="flex: 0.8; min-width: 140px; box-sizing: border-box;">
+            <h5 style="margin: 0 0 8px 0; color: #ffffff; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
+                Информация
+            </h5>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box;">
+                <li>
+                    <a href="/info/"
+                       style="color: #cbd5e1; text-decoration: none; font-size: 12px; font-weight: 500; transition: color 0.15s; display: inline-block; line-height: 1.1;"
+                       onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#cbd5e1'">
+                        • О компании
+                    </a>
+                </li>
+                <li>
+                    <a href="/contacts/"
+                       style="color: #cbd5e1; text-decoration: none; font-size: 12px; font-weight: 500; transition: color 0.15s; display: inline-block; line-height: 1.1;"
+                       onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#cbd5e1'">
+                        • Контакты
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Колонка 4: Прямые контакты офиса -->
+        <div style="flex: 1.3; min-width: 260px; box-sizing: border-box;">
+            <h5 style="margin: 0 0 8px 0; color: #ffffff; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
+                Контакты филиала
+            </h5>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; box-sizing: border-box; font-size: 12px; color: #cbd5e1;">
+                <li style="line-height: 1.3;">
+                    <strong style="color: #ffffff;">📍 Адрес:</strong> г. Иркутск, ул. Подаптечная, д. 2
+                    <span style="font-size: 11px; color: #94a3b8; white-space: nowrap;">(09:00–18:00)</span>
+                </li>
+                <li>
+                    <strong style="color: #ffffff;">📞 Телефон:</strong>
+                    <a href="tel:+73952799272" style="color: #cbd5e1; text-decoration: none; font-weight: 700; transition: color 0.15s;" onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#cbd5e1'">+7 (3952) 79-92-72</a>
+                </li>
+                <li>
+                    <strong style="color: #ffffff;">✉️ Email:</strong>
+                    <a href="mailto:irkutsk1@crv-bakery.ru" style="color: #cbd5e1; text-decoration: none; transition: color 0.15s;" onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#cbd5e1'">irkutsk1@crv-bakery.ru</a>
+                </li>
+            </ul>
+        </div>
+
+    </div> <!-- Конец флекс-контейнера рядов -->
+<!-- ========================================================================= -->
+<!-- БЛОК 4: ПОДЖАТАЯ ПЛАНКА КОПИРАЙТА И ЗАКРЫТИЕ СТРУКТУРЫ                    -->
+<!-- ========================================================================= -->
+    <!-- Отступ сверху уменьшен с 40px до 15px для максимального сжатия высоты -->
+    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #334155; text-align: center; box-sizing: border-box; width: 100%;">
+        <p style="margin: 0; color: #64748b; font-size: 11px; font-weight: 500;">
+            © 2011—2026 Официальный сайт Иркутского филиала CRV Bakery.
+        </p>
+    </div>
+
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #f8fafc; min-height: 100vh; padding: 60px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box; width: 100%;">
+    <div style="max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
+
+        <!-- Хлебные крошки / Навигация -->
+        <div style="margin-bottom: 30px; font-size: 14px; color: #718096; font-weight: 500;">
+            <a href="/" style="color: #718096; text-decoration: none; transition: color 0.2s;"
+               onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#718096'">Главная</a>
+            <span style="margin: 0 10px; color: #cbd5e0;">/</span>
+            <span style="color: #2d3748; font-weight: 600;">О компании</span>
+        </div>
+
+        <!-- Главный заголовок и Текстовый монолит -->
+        <div style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; padding: 50px; margin-bottom: 40px; box-sizing: border-box; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: 0; width: 6px; height: 100%; background-color: #e60000;"></div>
+
+            <h1 style="margin: 0 0 30px 0; font-size: 36px; font-weight: 800; color: #2d3748; letter-spacing: -0.5px;">О
+                компании CRV Bakery</h1>
+
+            <div style="font-size: 17px; line-height: 1.8; color: #4a5568; font-weight: 500; text-align: justify;">
+                <p style="margin: 0 0 20px 0;">
+                    Компания <strong>CRV Bakery</strong> работает на рынке более 15 лет и на сегодняшний день входит в
+                    число крупнейших поставщиков пищевого оборудования. В нашем ассортименте только надёжное,
+                    современное и качественное оборудование от проверенных поставщиков. Мы сотрудничаем с известными
+                    брендами из России, Европы, Китая и Кореи.
+                </p>
+                <p style="margin: 0 0 20px 0;">
+                    Наши специалисты сопровождают клиентов на всех этапах: помогают с подбором оборудования, оформлением
+                    сделки и отслеживанием доставки. Благодаря сбалансированной ценовой политике клиенты могут
+                    приобрести технику высокого качества по оптимальной цене. В Иркутске нами активно наращиваются
+                    поставки оборудования в рестораны, кафе, пекарни, столовые и другие заведения общепита.
+                </p>
+                <p style="margin: 0;">
+                    Мы поддерживаем широкий ассортимент на складе, чтобы клиенты не тратили время на ожидание заказа.
+                    Наши сотрудники помогут подобрать оптимальное решение с учётом ваших задач и бюджета. В нашем
+                    каталоге представлено разнообразное технологическое оборудование, а также вспомогательная мебель и
+                    инвентарь: столы, полки, мойки, тележки, формы для выпечки, гастроёмкости и многое другое.
+                </p>
+            </div>
+        </div>
+        <!-- Живые b2b преимущества / Инфографика сайта -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; box-sizing: border-box; margin-bottom: 50px;">
+
+            <!-- Карточка 1 -->
+            <div style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+                <div style="font-size: 32px; font-weight: 800; color: #e60000; margin-bottom: 10px;">15+ лет</div>
+                <div style="font-size: 16px; font-weight: 700; color: #2d3748; margin-bottom: 8px;">Опыта на рынке</div>
+                <div style="font-size: 14px; color: #718096; line-height: 1.5;">Один из крупнейших и надежных
+                    поставщиков профессионального пищевого оборудования.
+                </div>
+            </div>
+
+            <!-- Карточка 2 -->
+            <div style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+                <div style="font-size: 32px; font-weight: 800; color: #e60000; margin-bottom: 10px;">Склад</div>
+                <div style="font-size: 16px; font-weight: 700; color: #2d3748; margin-bottom: 8px;">Широкий
+                    ассортимент
+                </div>
+                <div style="font-size: 14px; color: #718096; line-height: 1.5;">Постоянное наличие техники, мебели и
+                    инвентаря в Иркутске без долгого ожидания.
+                </div>
+            </div>
+
+            <!-- Карточка 3 -->
+            <div style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+                <div style="font-size: 32px; font-weight: 800; color: #e60000; margin-bottom: 10px;">B2B</div>
+                <div style="font-size: 16px; font-weight: 700; color: #2d3748; margin-bottom: 8px;">Полное
+                    сопровождение
+                </div>
+                <div style="font-size: 14px; color: #718096; line-height: 1.5;">Помощь с подбором под бюджет,
+                    оформлением сделок и отслеживанием логистики.
+                </div>
+            </div>
+
+        </div>
+        <!-- Кнопки действия (Обновлено: Одинаковый премиальный эффект движения для обеих кнопок) -->
+        <div style="text-align: center; box-sizing: border-box; margin-bottom: 60px; display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; align-items: center; margin-top: 40px;">
+
+            <!-- Кнопка 1. Внутренний каталог техники -->
+            <a href="{% url 'catalog:catalog' %}"
+               style="text-decoration: none; display: inline-flex; align-items: center; padding: 18px 38px; background-color: #1e293b; color: #ffffff; font-size: 15px; font-weight: 700; border-radius: 12px; border: 2px solid #1e293b; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 12px rgba(30,41,59,0.15); outline: none;"
+               onmouseover="this.style.backgroundColor='#e60000'; this.style.borderColor='#e60000'; this.style.boxShadow='0 12px 24px rgba(230,0,0,0.2)'; this.style.transform='translateY(-3px)';"
+               onmouseout="this.style.backgroundColor='#1e293b'; this.style.borderColor='#1e293b'; this.style.boxShadow='0 4px 12px rgba(30,41,59,0.15)'; this.style.transform='translateY(0)';"
+               onmousedown="this.style.transform='translateY(-1px)';"
+               onmouseup="this.style.transform='translateY(-3px)';">
+                Перейти к каталогу продукции →
+            </a>
+
+            <!-- Кнопка 2. НАШ ОСНОВНОЙ САЙТ -->
+            <a href="https://crv-bakery.ru"
+               target="_blank"
+               style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; padding: 18px 38px; background-color: #ffffff; color: #0f172a; font-size: 15px; font-weight: 700; border-radius: 12px; border: 2px solid #e2e8f0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 12px rgba(0,0,0,0.03); outline: none;"
+               onmouseover="this.style.borderColor='#e60000'; this.style.color='#e60000'; this.style.boxShadow='0 12px 24px rgba(230,0,0,0.08)'; this.style.transform='translateY(-3px)';"
+               onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#0f172a'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.03)'; this.style.transform='translateY(0)';"
+               onmousedown="this.style.transform='translateY(-1px)';"
+               onmouseup="this.style.transform='translateY(-3px)';">
+                <span style="font-size: 18px; line-height: 1;">🌐</span>
+                <span>Общий сайт компании</span>
+            </a>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

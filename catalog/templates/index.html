@@ -1,0 +1,126 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #f8fafc; min-height: 100vh; padding: 50px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box; width: 100%;">
+    <div style="max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+        <!-- 1. БЛОК МОНОЛИТНОГО ОБНОВЛЕННОГО БАННЕРА -->
+        <div style="margin-bottom: 50px; box-sizing: border-box; width: 100%;">
+            <!-- Полноширинный баннер: Пищевое оборудование -->
+            <div style="width: 100%; background: linear-gradient(135deg, #111827 0%, #030712 100%); padding: 65px 60px; border-radius: 20px; color: #ffffff; display: flex; flex-direction: column; justify-content: space-between; min-height: 320px; box-sizing: border-box; border-left: 6px solid #e60000; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06); position: relative; overflow: hidden;">
+
+                <!-- Мягкое неоновое b2b-свечение на фоне -->
+                <div style="position: absolute; right: -80px; bottom: -80px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(230,0,0,0.07) 0%, rgba(0,0,0,0) 70%); pointer-events: none;"></div>
+
+                <div style="max-width: 850px; position: relative; z-index: 1;">
+                    <h2 style="margin: 0 0 20px 0; font-size: 44px; font-weight: 800; line-height: 1.15; letter-spacing: -0.5px; color: #ffffff;">
+                        Профессиональное пищевое оборудование
+                    </h2>
+                    <p style="margin: 0; color: #9ca3af; font-size: 17px; max-width: 720px; line-height: 1.65; font-weight: 400;">
+                        Поставка, пусконаладка и комплексное техническое обслуживание промышленного пищевого, хлебопекарного, торгового и холодильного оборудования от регионального филиала компании CRV в Иркутске.
+                    </p>
+                </div>
+
+                <div style="margin-top: 40px; position: relative; z-index: 1;">
+                    <a href="{% url 'catalog:catalog' %}"
+                       style="text-decoration: none; display: inline-block; padding: 16px 38px; background-color: #e60000; color: #ffffff; font-size: 15px; font-weight: 700; border-radius: 8px; box-shadow: 0 4px 15px rgba(230, 0, 0, 0.35); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);"
+                       onmouseover="this.style.backgroundColor='#b30000'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(230, 0, 0, 0.45)';"
+                       onmouseout="this.style.backgroundColor='#e60000'; this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(230, 0, 0, 0.35)';"
+                       onmousedown="this.style.transform='scale(0.98)'"
+                       onmouseup="this.style.transform='translateY(-2px)'">
+                        Перейти в каталог техники →
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- 2. ЖИВАЯ ВИТРИНА: САМОЕ ПРОСМАТРИВАЕМОЕ ОБОРУДОВАНИЕ -->
+        <div style="margin-bottom: 40px; box-sizing: border-box; width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
+                <div>
+                    <h2 style="margin: 0; color: #0f172a; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">
+                        Самое просматриваемое оборудование
+                    </h2>
+                </div>
+                <a href="{% url 'catalog:catalog' %}"
+                   style="color: #e60000; text-decoration: none; font-size: 15px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; transition: color 0.2s;"
+                   onmouseover="this.style.color='#b30000'"
+                   onmouseout="this.style.color='#e60000'">
+                    Смотреть весь каталог
+                    <span style="font-size: 16px; line-height: 1;">→</span>
+                </a>
+            </div>
+
+            <!-- Сетка карточек популярных b2b-товаров -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; box-sizing: border-box;">
+                <!-- ИСПРАВЛЕНО: Цикл, empty и endfor объединены в одном блоке, чтобы избежать TemplateSyntaxError -->
+                {% for prod in latest_products %}
+                <div style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01); border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box;"
+                     onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)'; this.style.borderColor='#cbd5e1';"
+                     onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)'; this.style.borderColor='#e2e8f0';">
+
+                    <!-- Фото товара и статус-плашки -->
+                    <div style="width: 100%; height: 240px; background-color: #ffffff; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; padding: 20px; box-sizing: border-box;">
+                        {% if prod.in_stock %}
+                        <div style="position: absolute; top: 16px; left: 16px; z-index: 5; background-color: #e6f7ed; color: #1f9254; border: 1px solid #c2ebd0; padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">В наличии</div>
+                        {% else %}
+                        <div style="position: absolute; top: 16px; left: 16px; z-index: 5; background-color: #fff9db; color: #d97706; border: 1px solid #ffe399; padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Под заказ</div>
+                        {% endif %}
+
+                        {% if prod.photo %}
+                        <a href="{% url 'catalog:product_detail' prod.id %}" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+                            <img src="{{ prod.photo.url }}" alt="{{ prod.title }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </a>
+                        {% else %}
+                        <div style="background-color: #f1f5f9; width: 100%; height: 100%; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #94a3b8; gap: 8px;">
+                            <span style="font-size: 24px;">📷</span>
+                            <span style="font-size: 13px; font-weight: 500;">Нет изображения</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Инфо-блок карточки -->
+                    <div style="padding: 24px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; border-top: 1px solid #f1f5f9; box-sizing: border-box; background-color: #ffffff;">
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="margin: 0; color: #1e293b; font-size: 16px; font-weight: 700; line-height: 1.5; min-height: 48px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                <a href="{% url 'catalog:product_detail' prod.id %}" style="color: #1e293b; text-decoration: none; transition: color 0.15s;" onmouseover="this.style.color='#e60000'" onmouseout="this.style.color='#1e293b'">
+                                    {{ prod.title }}
+                                </a>
+                            </h3>
+                        </div>
+
+                        <!-- Единый фиксированный горизонтальный ряд для удержания ровной геометрии витрины -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; padding-top: 12px; border-top: 1px dashed #e2e8f0; width: 100%; gap: 10px;">
+
+                            <!-- ИСПРАВЛЕНО: Флекс-контейнер автоматически занимает всё свободное место слева -->
+                            <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0; box-sizing: border-box;">
+                                <span style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Цена</span>
+
+                                {% if prod.in_stock %}
+                                    <span style="font-size: 18px; font-weight: 800; color: #e60000; white-space: nowrap;">{{ prod.formatted_price }} ₽</span>
+                                {% else %}
+                                    <!-- ИСПРАВЛЕНО: Возвращен крупный b2b-размер 16px, текст никогда не налезет на кнопку -->
+                                    <span style="font-size: 16px; font-weight: 800; color: #e60000; line-height: 1.2; display: inline-block; white-space: normal; word-break: keep-all;">Цена по запросу</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- ИСПРАВЛЕНО: Кнопка получила фиксированную ширину (flex-shrink: 0), гарантируя защиту от наложения -->
+                            <a href="{% url 'catalog:product_detail' prod.id %}"
+                               style="text-decoration: none; padding: 8px 16px; background-color: #f1f5f9; color: #475569; font-size: 13px; font-weight: 700; border-radius: 6px; transition: all 0.15s ease; white-space: nowrap; text-align: center; box-sizing: border-box; flex-shrink: 0; min-width: 105px;"
+                               onmouseover="this.style.backgroundColor='#e60000'; this.style.color='#ffffff';"
+                               onmouseout="this.style.backgroundColor='#f1f5f9'; this.style.color='#475569';">
+                                Подробнее
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 50px; background: white; border-radius: 16px; border: 1px solid #e2e8f0; color: #64748b; font-size: 15px; font-style: italic;">
+                    В данный момент популярные b2b-позиции отсутствуют в каталоге
+                </div>
+                {% endfor %}
+            </div>
+        </div> <!-- Конец блока живой витрины -->
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,294 @@
+/* --- ПЕРЕМЕННЫЕ И НАСТРОЙКИ --- */
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --success-color: #28a745;
+    --success-hover: #218838;
+    --danger-color: #dc3545;
+    --dark-color: #333333;
+    --light-bg: #f4f4f9;
+    --card-bg: #f8f9fa;
+    --text-muted: #555555;
+    --max-width: 1200px;
+    --transition-speed: 0.3s;
+}
+
+/* --- СБРОС СТИЛЕЙ И БАЗА --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--light-bg);
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: var(--dark-color);
+    line-height: 1.5;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* --- ХЕДЕР --- */
+.main-header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Верхняя часть хедера */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 15px 20px;
+    gap: 20px;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+    transition: height var(--transition-speed) ease;
+}
+
+/* Блок контактов (address) */
+.contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-style: normal; /* Сброс курсива тега <address> */
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+}
+
+.contact-item i {
+    color: var(--primary-color);
+    width: 18px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.address-text {
+    font-weight: 500;
+}
+
+.contact-link {
+    color: var(--primary-color);
+    font-weight: bold;
+    transition: color var(--transition-speed);
+}
+
+.contact-link:hover {
+    color: var(--primary-hover);
+}
+
+/* Режим работы */
+.work-hours {
+    text-align: right;
+    background-color: var(--card-bg);
+    padding: 12px 22px;
+    border-radius: 6px;
+}
+
+.work-hours-title {
+    color: #222222;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.days {
+    font-weight: bold;
+}
+
+.weekend {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+/* Нижняя часть хедера (Навигационная панель) */
+.header-bottom {
+    background-color: var(--dark-color);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 12px 20px;
+    gap: 15px;
+}
+
+/* Список меню */
+.menu-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+}
+
+.menu-link {
+    display: inline-block;
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 4px;
+    transition: background var(--transition-speed);
+    white-space: nowrap;
+}
+
+.menu-link:hover,
+.menu-link:focus-visible {
+    background-color: #555555;
+    outline: none;
+}
+
+/* Форма поиска */
+.search-form {
+    display: flex;
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    font-size: 15px;
+}
+
+.search-btn {
+    padding: 10px 18px;
+    border: none;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background var(--transition-speed);
+    font-size: 15px;
+}
+
+.search-btn:hover,
+.search-btn:focus-visible {
+    background-color: var(--primary-hover);
+}
+
+/* Кнопки авторизации */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-btn {
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-login {
+    color: #ffffff;
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    transition: background var(--transition-speed), color var(--transition-speed);
+}
+
+.btn-login:hover,
+.btn-login:focus-visible {
+    background-color: #ffffff;
+    color: var(--dark-color);
+}
+
+.btn-register {
+    background-color: var(--success-color);
+    color: #ffffff;
+    transition: background var(--transition-speed);
+}
+
+.btn-register:hover,
+.btn-register:focus-visible {
+    background-color: var(--success-hover);
+}
+
+/* --- АДАПТИВНОСТЬ (МЕДИА-ЗАПРОСЫ) --- */
+
+/* Планшеты и небольшие экраны */
+@media (max-width: 992px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+
+    .menu-list,
+    .auth-buttons {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .search-form {
+        max-width: 100%;
+        order: 3; /* Смещает поиск вниз под меню */
+    }
+}
+
+/* Мобильные телефоны */
+@media (max-width: 680px) {
+    .header-top {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .logo img {
+        height: 80px;
+    }
+
+    .contacts {
+        align-items: center;
+    }
+
+    .work-hours {
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+    }
+
+    .menu-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        width: 100%;
+    }
+
+    .menu-link,
+    .auth-btn {
+        display: block;
+        text-align: center;
+        font-size: 15px;
+        padding: 10px;
+    }
+}

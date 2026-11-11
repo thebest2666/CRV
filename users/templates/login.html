@@ -1,0 +1,122 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Контейнер-обертка для центрирования на весь экран -->
+<div class="login-wrapper"
+     style="display: flex; justify-content: center; align-items: center; min-height: 90vh; width: 100%; padding: 40px 20px; background-color: #f8f9fa; box-sizing: border-box;">
+
+    <!-- Карточка формы авторизации -->
+    <div class="login-container"
+         style="background-color: #ffffff; padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); width: 100%; max-width: 500px; border-top: 5px solid #e60000; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+
+        <h2 style="text-align: center; margin-bottom: 30px; color: #2d3748; font-size: 24px; font-weight: 700;">
+            Войти в личный кабинет</h2>
+
+        <!-- ИСПРАВЛЕНО: Универсальный блок вывода ошибок авторизации -->
+        {% if error %}
+        <div style="background-color: #fff5f5; color: #e60000; padding: 12px; border-radius: 6px; border: 1px solid #fed7d7; margin-bottom: 20px; font-size: 14px; text-align: center; font-weight: 600;">
+            {{ error }}
+        </div>
+        {% elif errors %}
+        <div style="background-color: #fff5f5; color: #e60000; padding: 12px; border-radius: 6px; border: 1px solid #fed7d7; margin-bottom: 20px; font-size: 14px; text-align: left; font-weight: 600;">
+            <ul style="margin: 0; padding-left: 20px;">
+                {% for field, error_list in errors.items %}
+                    {% for error in error_list %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Направление отправки на view авторизации -->
+        <form action="{% url 'users:login' %}" method="POST" style="margin: 0;">
+            {% csrf_token %}
+            <!-- Поле Email -->
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="login_email"
+                       style="display: block; margin-bottom: 8px; color: #4a5568; font-size: 14px; font-weight: 600;">Email</label>
+                <input type="email" id="login_email" name="username" placeholder="admin@example.com" required
+                       autocomplete="email"
+                       value="{{ request.POST.username|default:'' }}"
+                       style="width: 100%; padding: 12px 16px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 15px; color: #2d3748; outline: none; box-sizing: border-box; transition: all 0.2s;"
+                       onfocus="this.style.borderColor='#e60000'; this.style.boxShadow='0 0 0 3px rgba(230, 0, 0, 0.1)';"
+                       onblur="this.style.borderColor='#cbd5e0'; this.style.boxShadow='none';">
+            </div>
+            <!-- Поле Пароль с кнопкой показа/скрытия -->
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="password"
+                       style="display: block; margin-bottom: 8px; color: #4a5568; font-size: 14px; font-weight: 600;">Пароль</label>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <input type="password" id="password" name="password" placeholder="••••••••••••" required
+                           style="width: 100%; padding: 12px 45px 12px 16px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 15px; color: #2d3748; outline: none; box-sizing: border-box; transition: all 0.2s;"
+                           onfocus="this.style.borderColor='#e60000'; this.style.boxShadow='0 0 0 3px rgba(230, 0, 0, 0.1)';"
+                           onblur="this.style.borderColor='#cbd5e0'; this.style.boxShadow='none';">
+
+                    <!-- Кнопка-глаз -->
+                    <button type="button" onclick="togglePasswordVisibility()"
+                            style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; color: #718096; padding: 4px; display: flex; align-items: center; justify-content: center; outline: none;"
+                            title="Показать/скрыть пароль">
+                        <!-- Ссылка пространства имен xmlns для корректного рендеринга SVG -->
+                        <svg id="password-icon" xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Строка: Запомнить меня и Ссылка на восстановление -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-size: 14px;">
+                <label style="display: flex; align-items: center; color: #718096; cursor: pointer; user-select: none;">
+                    <input type="checkbox" name="remember_me" style="margin-right: 8px; accent-color: #e60000;">
+                    Запомнить меня
+                </label>
+                <!-- Подключен динамический URL-тег для перехода на страницу сброса пароля -->
+                <a href="{% url 'users:password_reset' %}" style="color: #718096; text-decoration: none;"
+                   onmouseover="this.style.textDecoration='underline';"
+                   onmouseout="this.style.textDecoration='none';">Забыли пароль?</a>
+            </div>
+            <!-- Кнопка: Войти в аккаунт -->
+            <button type="submit"
+                    style="width: 100%; background-color: #e60000; color: #ffffff; border: none; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background-color 0.2s; box-sizing: border-box; margin-bottom: 20px;"
+                    onmouseover="this.style.backgroundColor='#cc0000';"
+                    onmouseout="this.style.backgroundColor='#e60000';">
+                Войти в аккаунт
+            </button>
+
+            <!-- Разделитель «или» -->
+            <div style="display: flex; align-items: center; text-align: center; color: #a0aec0; font-size: 14px; margin-bottom: 20px;">
+                <div style="flex: 1; border-bottom: 1px solid #e2e8f0;"></div>
+                <span style="padding: 0 10px;">или</span>
+                <div style="flex: 1; border-bottom: 1px solid #e2e8f0;"></div>
+            </div>
+
+            <!-- Кнопка: Создать новый аккаунт -->
+            <a href="{% url 'users:register' %}"
+               style="display: block; text-align: center; width: 100%; background-color: transparent; color: #e60000; border: 2px solid #e60000; padding: 12px; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.2s; box-sizing: border-box;"
+               onmouseover="this.style.backgroundColor='rgba(230, 0, 0, 0.05)';"
+               onmouseout="this.style.backgroundColor='transparent';">
+                Создать новый аккаунт
+            </a>
+        </form>
+    </div>
+</div>
+<!-- Скрипт для работы кнопки-глаза -->
+<script>
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const icon = document.getElementById('password-icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.innerHTML = '<line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9a3 3 0 1 1 4.17 4.17"></path><path d="M17.02 21.82A10 10 0 0 1 12 22c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-1.42-1.41"></path>';
+        } else {
+            passwordInput.type = 'password';
+            icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+        }
+    }
+</script>
+{% endblock %}

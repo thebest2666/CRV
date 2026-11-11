@@ -1,0 +1,351 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #f8fafc; min-height: 100vh; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box; width: 100%;">
+    <div style="max-width: 1100px; margin: 0 auto; box-sizing: border-box;">
+
+        <!-- Крошки навигации -->
+        <div style="margin-bottom: 25px;">
+            <a href="{% url 'catalog:catalog' %}"
+               style="text-decoration: none; color: #64748b; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: color 0.15s ease;"
+               onmouseover="this.style.color='#e60000'"
+               onmouseout="this.style.color='#64748b'">
+                <span>←</span> Вернуться в каталог оборудования
+            </a>
+        </div>
+
+        <!-- ГЛАВНЫЙ БЛОК КАРТОЧКИ -->
+        <div style="background-color: #ffffff; padding: 35px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px -2px rgba(15,23,42,0.02); box-sizing: border-box;">
+
+            <!-- ВЕРХНИЙ ЭТАЖ: Компактный двухколоночный блок -->
+            <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-bottom: 40px; align-items: center;">
+
+                <!-- Левая мини-колонка: Фото оборудования -->
+                <div style="flex: 1; min-width: 280px; max-width: 360px; display: flex; justify-content: center; align-items: center; background-color: #ffffff; border-radius: 12px; border: 1px solid #f1f5f9; height: 320px; padding: 15px; box-sizing: border-box;">
+                    {% if product.photo %}
+                    <img src="{{ product.photo.url }}" alt="{{ product.title }}"
+                         style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    {% else %}
+                    <div style="text-align: center; color: #94a3b8; font-size: 13px; font-weight: 500;">📷 Фото отсутствует</div>
+                    {% endif %}
+                </div>
+                <!-- Правая мини-колонка: Название, Статус и Цена -->
+                <div style="flex: 1.5; min-width: 300px; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box;">
+                    {% if product.subcategory %}
+                    <span style="font-size: 11px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                        {{ product.subcategory.category.title|default:"Каталог" }} <span style="color: #cbd5e1;">/</span> <span style="color: #e60000;">{{ product.subcategory.title }}</span>
+                    </span>
+                    {% endif %}
+
+                    <!-- Название модели -->
+                    <h1 style="margin: 0; color: #0f172a; font-size: 26px; font-weight: 800; line-height: 1.2;">
+                        {{ product.title }}
+                    </h1>
+
+                    <!-- Ряд метаданных: Просмотры + Статус наличия -->
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <div style="font-size: 13px; color: #64748b; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                            <span>👁</span> Просмотров: {{ product.views_counter }}
+                        </div>
+
+                        {% if product.in_stock %}
+                        <span style="background-color: #dcfce7; color: #16a34a; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700;">● В наличии на складе</span>
+                        {% else %}
+                        <span style="background-color: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700;">○ Под заказ</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Горизонтальная коммерческая плашка стоимости -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; background: #f8fafc; padding: 15px 20px; border-radius: 10px; border: 1px solid #e2e8f0; border-left: 4px solid #e60000; margin-top: 5px; box-sizing: border-box; width: 100%;">
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+                            <span style="font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.5px;">Стоимость оборудования</span>
+
+                            <!-- Комбинированный вывод текста и кнопки строго друг под другом -->
+                            {% if product.in_stock %}
+                                <span style="font-size: 22px; font-weight: 800; color: #e60000;">{{ product.formatted_price }} ₽</span>
+                            {% else %}
+                                <span style="font-size: 20px; font-weight: 800; color: #e60000; display: block; margin-bottom: 2px;">Цена по запросу</span>
+                                <button type="button" onclick="openKPModal()" style="padding: 8px 16px; background-color: #1e293b; color: #ffffff; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background-color 0.15s; box-shadow: 0 4px 6px rgba(0,0,0,0.05);" onmouseover="this.style.backgroundColor='#e60000'" onmouseout="this.style.backgroundColor='#1e293b'">
+                                    Запросить информацию о товаре
+                                </button>
+                            {% endif %}
+                        </div>
+
+                        {% if request.user.is_superuser %}
+                        <div style="display: flex; gap: 10px; box-sizing: border-box; align-self: flex-end;">
+                            <button type="button" onclick="openEditModal()"
+                                    style="padding: 10px 16px; background-color: #0f172a; color: #ffffff; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.1s;"
+                                    onmouseover="this.style.backgroundColor='#e60000'"
+                                    onmouseout="this.style.backgroundColor='#0f172a'">Изменить
+                            </button>
+
+                            <form action="{% url 'catalog:product_detail' product.id %}" method="POST"
+                                  onsubmit="return confirm('Вы уверены, что хотите удалить товар?');"
+                                  style="margin: 0; display: inline-block;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete_product">
+                                <button type="submit"
+                                        style="padding: 10px 16px; background-color: #fff5f5; color: #e53e3e; border: 1px solid #fee2e2; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer;">
+                                    Удалить
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div> <!-- Конец верхнего этажа -->
+            <!-- НИЖНИЙ ЭТАЖ: Сплошная b2b-выгрузка данных -->
+            <div style="margin-top: 25px; border-top: 1px solid #f1f5f9; padding-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; box-sizing: border-box; width: 100%;">
+
+                <!-- Подблок: Технические характеристики -->
+                <div style="box-sizing: border-box;">
+                    <h3 style="margin: 0 0 15px 0; color: #0f172a; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+                        Технические характеристики
+                    </h3>
+
+                    <div style="border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01); box-sizing: border-box;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; margin: 0;">
+                            <tbody>
+                                <!-- БЕЗОПАСНО: Построчный обход без рисков вызвать TemplateSyntaxError -->
+                                {% for line in product.description.splitlines %}
+                                    {% if line %}
+                                        <tr style="{% if forloop.counter|divisibleby:2 %}background-color: #f8fafc;{% endif %} border-bottom: 1px solid #f1f5f9;">
+                                            <td colspan="2" style="padding: 10px 14px; color: #334155; font-weight: 500; line-height: 1.45; word-break: break-word;">
+                                                {{ line }}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="2" style="padding: 15px; color: #94a3b8; text-align: center; font-style: italic;">
+                                            Технические параметры не заполнены
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Подблок: Условия поставки -->
+                <div style="box-sizing: border-box;">
+                    <h3 style="margin: 0 0 15px 0; color: #0f172a; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+                        Условия поставки в Иркутске
+                    </h3>
+                    <div style="border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; padding: 22px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; font-size: 14px; color: #334155; line-height: 1.6; height: calc(100% - 39px);">
+                        <p style="margin: 0;"><strong style="color: #0f172a;">📍 Отгрузка со склада:</strong>
+                            Оборудование доступно для поставок физическим, юридическим лицам и ИП. Отгрузка осуществляется самовывозом со склада в Иркутске либо через ТК.</p>
+                        <p style="margin: 0;"><strong style="color: #0f172a;">📄 Документация:</strong> Предоставляется полный комплект закрывающих документов: Универсальный передаточный документ (УПД) с НДС, гарантийный талон и сертификаты соответствия.</p>
+                    </div>
+                </div>
+
+            </div> <!-- Конец нижнего этажа -->
+        </div> <!-- Конец главного блока карточки -->
+    </div>
+</div>
+<!-- ========================================================================= -->
+<!-- БЛОК 5: МОДАЛЬНЫЕ ОКНА (РАСШИРЕННЫЙ ЗАПРОС КП + ПАНЕЛЬ АДМИНИСТРАТОРА)     -->
+<!-- ========================================================================= -->
+
+<!-- 5.1 РАСШИРЕННАЯ B2B ФОРМА ЗАПРОСА КП ДЛЯ КОНТРАГЕНТОВ -->
+<div id="requestKPModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.6); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <div style="background-color: #ffffff; width: 100%; max-width: 550px; border-radius: 12px; padding: 35px 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); box-sizing: border-box; position: relative; max-height: 95vh; overflow-y: auto;">
+
+        <h3 style="margin-top: 0; margin-bottom: 8px; color: #0f172a; font-size: 20px; font-weight: 800; letter-spacing: -0.3px;">Запрос информации о товаре</h3>
+        <p style="margin: 0 0 25px 0; color: #64748b; font-size: 13px; line-height: 1.45;">Менеджер подготовит информацию о  <strong>«{{ product.title }}»</strong> и свяжется с вами.</p>
+
+        <form id="kpRequestForm" onsubmit="submitKPForm(event)">
+            {% csrf_token %}
+            <input type="hidden" name="product_title" value="{{ product.title }}">
+
+            <!-- Статус AJAX-отправки -->
+            <div id="kpModalStatus" style="display: none; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 600; margin-bottom: 20px;"></div>
+
+            <!-- Поля сбора лидов контрагентов -->
+            <div style="margin-bottom: 18px; width: 100%;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Ваше имя *</label>
+                <input type="text" name="client_name" required placeholder="Иван" style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; outline: none; transition: border-color 0.15s;" onfocus="this.style.borderColor='#e60000';" onblur="this.style.borderColor='#cbd5e1';">
+            </div>
+
+            <div style="margin-bottom: 18px; width: 100%;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Контактный телефон *</label>
+                <input type="tel" id="kp_phone" name="client_phone" required placeholder="+79504251780" pattern="^\+7[0-9]{10}$" title="Номер должен начинаться с +7 и содержать 10 цифр" style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; outline: none;"
+                       oninput="let v = this.value.replace(/[^\d+]/g, ''); if(!v.startsWith('+7')) v = '+7' + v.replace(/[^\d]/g, ''); this.value = v.substring(0, 12);">
+            </div>
+
+            <div style="margin-bottom: 18px; width: 100%;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Электронная почта *</label>
+                <input type="email" name="client_email" required placeholder="example@mail.com" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(ru|com|net|org|info|biz)$" title="Разрешены зоны .ru, .com, .net, .org" style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; outline: none;"
+                       oninput="this.value = this.value.toLowerCase().trim();">
+            </div>
+
+            <div style="margin-bottom: 18px; width: 100%;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Название компании / ИП</label>
+                <input type="text" name="client_company" placeholder="ООО, ИП или название компании" style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; outline: none;">
+            </div>
+
+            <div style="margin-bottom: 18px; width: 100%;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Город доставки</label>
+                <input type="text" name="client_city" placeholder="Например: Иркутск, Ангарск, Братск" style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; outline: none;">
+            </div>
+
+            <div style="margin-bottom: 25px; width: 100%;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Комментарий к запросу</label>
+                <textarea name="client_comment" rows="3" placeholder="" style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; font-family: inherit; outline: none; resize: vertical;"></textarea>
+            </div>
+
+            <!-- Подвал формы КП -->
+            <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                <button type="button" onclick="closeKPModal()" style="padding: 11px 20px; background-color: #f1f5f9; color: #475569; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s;" onmouseover="this.style.backgroundColor='#e2e8f0'" onmouseout="this.style.backgroundColor='#f1f5f9'">Отмена</button>
+                <button type="submit" id="kpSubmitBtn" style="padding: 11px 24px; background-color: #e60000; color: #ffffff; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s;" onmouseover="this.style.backgroundColor='#b30000'" onmouseout="this.style.backgroundColor='#e60000'">Отправить запрос</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 5.2 ПАНЕЛЬ СУПЕРАДМИНИСТРАТОРА -->
+{% if request.user.is_superuser %}
+<div id="editProductModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+    <div style="background-color: #ffffff; width: 100%; max-width: 600px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); box-sizing: border-box; position: relative; max-height: 90vh; overflow-y: auto;">
+
+        <h3 style="margin-top: 0; margin-bottom: 20px; color: #0f172a; font-size: 18px; font-weight: 800; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Редактирование параметров оборудования</h3>
+
+        <form action="{% url 'catalog:product_detail' product.id %}" method="POST" enctype="multipart/form-data" style="margin: 0; display: flex; flex-direction: column; width: 100%;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="update_product">
+
+            <!-- Поле 1: Название модели -->
+            <div style="margin-bottom: 15px; width: 100%;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Название модели</label>
+                <input type="text" name="title" value="{{ product.title }}" required style="width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px;">
+            </div>
+
+            <!-- Двухколоночный ряд: Цена и Счетчик просмотров -->
+            <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; width: 100%;">
+                <div style="flex: 1; min-width: 120px;">
+                    <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Цена (₽)</label>
+                    <input type="text" name="price" value="{{ product.price }}" required style="width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px;">
+                </div>
+                <div style="flex: 1; min-width: 120px;">
+                    <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Счетчик просмотров</label>
+                    <input type="number" name="views_counter" value="{{ product.views_counter }}" style="width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px;">
+                </div>
+            </div>
+
+            <!-- Чекбокс статуса наличия оборудования -->
+            <div style="margin-bottom: 15px; width: 100%;">
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #475569; cursor: pointer;">
+                    <input type="checkbox" name="in_stock" {% if product.in_stock %}checked{% endif %} style="accent-color: #e60000; width: 16px; height: 16px;">
+                    Оборудование в наличии на складе
+                </label>
+            </div>
+
+            <!-- Поле технических характеристик оборудования -->
+            <div style="margin-bottom: 20px; width: 100%;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: #475569;">Технические характеристики (вводите через перенос строки)</label>
+                <textarea name="description" rows="6" required style="width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 14px; resize: vertical;">{{ product.description }}</textarea>
+            </div>
+
+             <!-- Блок выбора файла с отображением текущей b2b-картинки -->
+            <div style="margin-bottom: 25px; width: 100%; border-top: 1px solid #f1f5f9; padding-top: 15px; box-sizing: border-box;">
+                <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: #475569;">Обновить изображение оборудования</label>
+
+                <!-- Живое превью текущего фото из базы данных Django -->
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px; background-color: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; box-sizing: border-box;">
+                    {% if product.photo %}
+                        <img src="{{ product.photo.url }}" alt="Текущее фото" style="width: 50px; height: 50px; object-fit: contain; border-radius: 4px; background: #ffffff; border: 1px solid #cbd5e1;">
+                        <span style="font-size: 12px; color: #64748b; font-weight: 600;">📷 Текущее изображение уже загружено в базу</span>
+                    {% else %}
+                        <div style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 4px; color: #94a3b8; font-size: 16px;">?</div>
+                        <span style="font-size: 12px; color: #94a3b8; font-style: italic;">Изображение у товара отсутствует</span>
+                    {% endif %}
+                </div>
+
+                <!-- Стандартный инпут браузера для загрузки новой b2b-спецификации -->
+                <input type="file" name="photo" accept="image/*" style="width: 100%; padding: 10px; border: 1px dashed #cbd5e1; border-radius: 8px; background-color: #ffffff; font-size: 13px; box-sizing: border-box; cursor: pointer;">
+            </div>
+
+            <!-- Подвал формы: Управляющие кнопки действий -->
+             <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #e2e8f0; padding-top: 20px; margin-top: 15px; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; box-sizing: border-box; width: 100%;">
+                <button type="button" onclick="closeEditModal()" style="padding: 10px 20px; background-color: #f1f5f9; color: #475569; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s;" onmouseover="this.style.backgroundColor='#e2e8f0';" onmouseout="this.style.backgroundColor='#f1f5f9';">Отмена</button>
+                <button type="submit" style="padding: 10px 24px; background-color: #e60000; color: #ffffff; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s; box-shadow: 0 4px 10px rgba(230, 0, 0, 0.15);" onmouseover="this.style.backgroundColor='#b30000';" onmouseout="this.style.backgroundColor='#e60000';">Сохранить изменения</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    /* Скрипты модального окна админа */
+    function openEditModal() {
+        const modal = document.getElementById('editProductModal');
+        if (modal) { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    }
+    function closeEditModal() {
+        const modal = document.getElementById('editProductModal');
+        if (modal) { modal.style.display = 'none'; document.body.style.overflow = 'auto'; }
+    }
+
+    /* Скрипты b2b-формы запроса коммерческого предложения */
+    function openKPModal() {
+        document.getElementById('requestKPModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeKPModal() {
+        document.getElementById('requestKPModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        document.getElementById('kpRequestForm').reset();
+        document.getElementById('kpModalStatus').style.display = 'none';
+    }
+
+    function submitKPForm(event) {
+        event.preventDefault();
+        const form = document.getElementById('kpRequestForm');
+        const submitBtn = document.getElementById('kpSubmitBtn');
+        const statusDiv = document.getElementById('kpModalStatus');
+        const formData = new FormData(form);
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Отправка...';
+
+        fetch("{% url 'catalog:send_kp_request' %}", {
+            method: "POST",
+            body: formData,
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f0fff4';
+                statusDiv.style.color = '#16a34a';
+                statusDiv.style.border = '1px solid #dcfce7';
+                statusDiv.innerText = data.message;
+
+                setTimeout(() => { closeKPModal(); submitBtn.disabled = false; submitBtn.innerText = 'Отправить запрос'; }, 2200);
+            } else {
+                throw new Error(data.message);
+            }
+        })
+        .catch(error => {
+            statusDiv.style.display = 'block';
+            statusDiv.style.backgroundColor = '#fff5f5';
+            statusDiv.style.color = '#e60000';
+            statusDiv.style.border = '1px solid #fee2e2';
+            statusDiv.innerText = error.message || 'Произошла непредвиденная ошибка почтового сервера SMTP.';
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Отправить запрос';
+        });
+    }
+
+    window.onclick = function(event) {
+        const adminModal = document.getElementById('editProductModal');
+        const kpModal = document.getElementById('requestKPModal');
+        if (event.target === adminModal) closeEditModal();
+        if (event.target === kpModal) closeKPModal();
+    }
+</script>
+
+{% endblock %}

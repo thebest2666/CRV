@@ -1,0 +1,177 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ПОДКЛЮЧЕНО: Точный рабочий URL-адрес b2b-скрипта API Яндекс Карт 2.1 с поддержкой протокола HTTPS -->
+<script src="https://yandex.ru" type="text/javascript"></script>
+<div class="contact-page-wrapper">
+    <div class="contact-container">
+
+        <!-- ЛЕВАЯ КОЛОНКА: Реквизиты и контактные данные филиала -->
+        <div class="contact-info">
+            <h2 class="contact-title">Контакты филиала CRV Bakery в Иркутске</h2>
+
+            <div class="info-item">
+                <span class="info-label">Телефон отдела продаж в Иркутске</span>
+                <a href="tel:+73952799272" class="info-value link">+7 (3952) 79-92-72</a>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Электронная почта для заявок и КП</span>
+                <a href="mailto:irkutsk1@crv-bakery.ru" class="info-value link">irkutsk1@crv-bakery.ru</a>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Адрес офиса</span>
+                <p class="info-value">г. Иркутск, Подаптечная улица, д. 2</p>
+                <p class="info-coords">📍 Гео-координаты для навигатора: 52.286310, 104.308822</p>
+            </div>
+        </div>
+
+        <!-- ПРАВАЯ КОЛОНКА: Адаптивный блок под живую карту -->
+        <div class="contact-map-block">
+            <div id="yandex-contacts-map" style="width: 100%; height: 100%;"></div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    // Инициализация карты после полной загрузки CDN-скрипта Яндекса
+    ymaps.ready(init);
+
+    function init() {
+        // Точные географические координаты офиса (Подаптечная, 2)
+        var officeCoordinates = [52.286310, 104.308822];
+
+        var myMap = new ymaps.Map("yandex-contacts-map", {
+            center: officeCoordinates, // Центрируем карту на склад
+            zoom: 16, // Масштаб (подробный b2b вид со всеми строениями квартала)
+            controls: ['zoomControl', 'typeSelector', 'fullscreenControl']
+        });
+
+        // Создаем маркер (гео-метку) компании на карте
+        var myPlacemark = new ymaps.Placemark(officeCoordinates, {
+            balloonContentHeader: "<strong style='color:#e60000; font-family:sans-serif;'>CRV Bakery Иркутск</strong>",
+            balloonContentBody: "<span style='font-family:sans-serif; font-size:13px;'>Поставка пищевого и хлебопекарного оборудования.<br><b>Адрес:</b> Подаптечная улица, д. 2</span>",
+            hintContent: "Склад и офис CRV Bakery"
+        }, {
+            // Внешний вид метки: красный b2b маркер холдинга
+            preset: 'islands#redDotIconWithCaption',
+            iconCaption: 'CRV Bakery'
+        });
+
+        // Добавляем созданную гео-метку на карту
+        myMap.geoObjects.add(myPlacemark);
+
+        // Отключаем масштабирование колесиком мыши для удобства скролла страницы
+        myMap.behaviors.disable('scrollZoom');
+    }
+</script>
+<style>
+    /* Современные CSS стили для адаптивного контейнера контактов */
+    .contact-page-wrapper {
+        display: block;
+        width: 100%;
+        padding: 60px 20px;
+        background-color: #f8fafc; /* Светло-серый b2b фон страницы */
+        box-sizing: border-box;
+    }
+
+    .contact-container {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+        border: 1px solid #e2e8f0;
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .contact-info {
+        flex: 1;
+        min-width: 340px;
+        padding: 50px;
+        background: #1e293b; /* Интегрировано под цвет вашей шапки сайта */
+        color: #ffffff;
+        box-sizing: border-box;
+        border-top: 6px solid #e60000; /* Фирменная красная черта CRV */
+    }
+
+    .contact-title {
+        margin: 0 0 35px 0;
+        font-size: 32px;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+    }
+
+    .info-item {
+        margin-bottom: 30px;
+    }
+
+    .info-label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #94a3b8;
+        margin-bottom: 6px;
+        font-weight: 700;
+    }
+
+    .info-value {
+        font-size: 19px;
+        color: #ffffff;
+        margin: 0;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .info-value.link {
+        text-decoration: none;
+        color: #ffffff;
+        transition: all 0.2s ease;
+        display: inline-block;
+    }
+
+    /* Живой ховер в фирменном b2b цвете компании */
+    .info-value.link:hover {
+        color: #e60000 !important;
+        transform: translateX(3px);
+    }
+
+    .info-coords {
+        font-size: 14px;
+        color: #94a3b8;
+        margin: 8px 0 0 0;
+        font-weight: 500;
+    }
+
+    .contact-map-block {
+        flex: 1.5;
+        min-width: 400px;
+        height: 560px;
+        background: #f1f5f9;
+        box-sizing: border-box;
+    }
+
+    /* Мобильная адаптивность для планшетов и смартфонов */
+    @media (max-width: 820px) {
+        .contact-container {
+            flex-direction: column;
+        }
+
+        .contact-map-block {
+            height: 420px;
+            min-width: 100%;
+        }
+
+        .contact-info {
+            padding: 40px 30px;
+        }
+    }
+</style>
+{% endblock %}

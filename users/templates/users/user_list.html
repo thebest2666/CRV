@@ -1,0 +1,154 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #f8fafc; min-height: 100vh; padding: 50px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box; width: 100%;">
+    <div style="max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
+
+        <!-- Заголовок страницы -->
+        <div style="margin-bottom: 30px;">
+            <h1 style="margin: 0; color: #0f172a; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">
+                База данных зарегистрированных пользователей и b2b-контрагентов
+            </h1>
+        </div>
+        <!-- Контейнер таблицы -->
+        <div style="background-color: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); overflow: hidden; width: 100%; box-sizing: border-box;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; box-sizing: border-box;">
+
+                <thead>
+                <tr style="background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                    <th style="padding: 16px 20px; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; width: 60px;">
+                        ID
+                    </th>
+                    <th style="padding: 16px 20px; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">
+                        ФИО контрагента
+                    </th>
+                    <th style="padding: 16px 20px; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Название компании
+                    </th>
+                    <th style="padding: 16px 20px; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Электронная почта
+                    </th>
+                    <th style="padding: 16px 20px; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Контактный телефон
+                    </th>
+                    <th style="padding: 16px 20px; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Город
+                    </th>
+                    <th style="padding: 16px 20px; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Дата регистрации
+                    </th>
+                    <th style="padding: 16px 20px; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; width: 150px;">
+                        Статус прав
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for usr in all_users %}
+                <tr style="border-bottom: 1px solid #f1f5f9; transition: background-color 0.15s ease;"
+                    onmouseover="this.style.backgroundColor='#f8fafc'"
+                    onmouseout="this.style.backgroundColor='transparent'">
+
+                    <!-- Сквозной порядковый номер строки -->
+                    <td style="padding: 18px 20px; font-size: 14px; color: #64748b; font-weight: 500;">
+                        {{ forloop.counter }}
+                    </td>
+
+                    <!-- Копируемое ФИО -->
+                    <td style="padding: 18px 20px; font-size: 14px;">
+                            <span onclick="copyToClipboard(this, '{{ usr.first_name|escapejs }} {{ usr.last_name|escapejs }}')"
+                                  title="Нажмите, чтобы скопировать ФИО"
+                                  style="color: #0f172a; font-weight: 600; cursor: pointer; transition: all 0.15s; display: inline-block; user-select: all;">
+                                {{ usr.first_name }} {{ usr.last_name }}
+                            </span>
+                    </td>
+
+                    <!-- Копируемая Компания -->
+                    <td style="padding: 18px 20px; font-size: 14px;">
+                            <span onclick="copyToClipboard(this, '{{ usr.company|escapejs }}')"
+                                  title="Нажмите, чтобы скопировать название компании"
+                                  style="color: #334155; font-weight: 600; cursor: pointer; transition: all 0.15s; display: inline-block; user-select: all;">
+                                {{ usr.company|default:"—" }}
+                            </span>
+                    </td>
+
+                    <!-- Копируемый Email -->
+                    <td style="padding: 18px 20px; font-size: 14px; position: relative;">
+                            <span onclick="copyToClipboard(this, '{{ usr.email|escapejs }}')"
+                                  title="Нажмите, чтобы скопировать email"
+                                  style="color: #e60000; font-weight: 500; cursor: pointer; transition: all 0.15s; display: inline-block; user-select: all;">
+                                {{ usr.email }}
+                            </span>
+                    </td>
+
+                    <!-- Копируемый Телефон -->
+                    <td style="padding: 18px 20px; font-size: 14px; white-space: nowrap;">
+                            <span onclick="copyToClipboard(this, '{{ usr.phone|escapejs }}')"
+                                  title="Нажмите, чтобы скопировать телефон"
+                                  style="color: #334155; font-weight: 500; cursor: pointer; transition: all 0.15s; display: inline-block; user-select: all;">
+                                {{ usr.phone|default:"—" }}
+                            </span>
+                    </td>
+
+                    <!-- Город и дата -->
+                    <td style="padding: 18px 20px; font-size: 14px; color: #334155; font-weight: 500;">
+                        {{ usr.city|default:"—" }}
+                    </td>
+                    <td style="padding: 18px 20px; font-size: 14px; color: #94a3b8; font-weight: 500;">
+                        {{ usr.date_joined|date:"d.m.Y H:i" }}
+                    </td>
+
+                    <!-- Статус прав -->
+                    <td style="padding: 18px 20px;">
+                        {% if usr.is_superuser %}
+                        <span style="background-color: #fee2e2; color: #ef4444; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block;">
+                                    Администратор
+                                </span>
+                        {% else %}
+                        <span style="background-color: #e0f2fe; color: #0284c7; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block;">
+                                    Клиент
+                                </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <!-- Заглушка, если база пуста -->
+                <tr>
+                    <td colspan="8"
+                        style="text-align: center; padding: 50px 20px; color: #64748b; font-size: 15px; font-style: italic; font-weight: 500;">
+                        Зарегистрированные контрагенты отсутствуют в системе
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<script>
+    function copyToClipboard(element, textToCopy) {
+        // Если поле пустое, содержит прочерк, отменяем операцию
+        if (!textToCopy || textToCopy.trim() === '—' || textToCopy.trim() === '') return;
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            // Сохраняем исходное состояние элемента
+            const originalText = element.innerText;
+            const originalColor = window.getComputedStyle(element).color;
+
+            // Визуальная индикация: меняем цвет на зеленый и пишем текст уведомления
+            element.style.color = '#10b981';
+            element.innerText = 'Скопировано!';
+
+            // Плавное возвращение стилей через 1000 миллисекунд
+            setTimeout(() => {
+                element.style.color = originalColor;
+                element.innerText = originalText;
+            }, 1000);
+        }).catch(err => {
+            console.error('Ошибка копирования текста: ', err);
+        });
+    }
+</script>
+
+{% endblock %}
